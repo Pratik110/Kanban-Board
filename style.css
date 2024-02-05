@@ -1,15 +1,29 @@
 :root{
-    --red:#D64933;
-    --blue:#92DCE5;
+    --red:#e82608;
+    --blue:#0071db;
     --darkBlue:#2B303A;
     --light:#EEE5E9;
-    --grey:#7C7C7C;
+    --green:#058c00;
 }
 
 *{
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+}
+
+.appname{
+    position: absolute;
+    display: flex;
+    right: 20px;
+    top: 20px;
+}
+
+.appname > p{
+    color: white;
+    font-size: 35px;
+    font-weight: 300;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .toolbox-cont{
@@ -43,7 +57,7 @@
 }
 
 .green{
-    background-color: var(--grey);
+    background-color: var(--green);
 }
 
 .black{

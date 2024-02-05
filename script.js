@@ -4,7 +4,8 @@ let allPriorityColor = document.querySelectorAll(".priority-color");
 let textarea = document.querySelector(".textarea-cont");
 let mainCont = document.querySelector(".main-cont");
 let removeBtn = document.querySelector(".remove-btn");
-
+var uid = new ShortUniqueId();
+let modalPriorityColor = "black";
 let addModal = true;
 let removeFlag = false;
 
@@ -26,12 +27,16 @@ for (let i=0; i<allPriorityColor.length; i++){
             }
         }
         allPriorityColor[i].classList.add("active");
+        modalPriorityColor = allPriorityColor[i].classList[1];
+        console.log(modalPriorityColor);
     })
 }
 
 textarea.addEventListener("keydown",function(e){
     if (e.key=="Enter"){
-        createTicket();
+        let task = e.target.value; //or we can also use textArea.value
+        let taskId = uid.rnd();
+        createTicket(task,taskId,modalPriorityColor);
         modal.style.display = "none";
         addModal = true;
         textarea.value = "";
@@ -49,13 +54,13 @@ removeBtn.addEventListener("click",function(){
     }
 })
 
-function createTicket() {
+function createTicket(task,taskId,modalPriorityColor) {
     let ticketCont = document.createElement('div');
     ticketCont.setAttribute("class","ticket-cont");
     ticketCont.innerHTML = `<div class="ticket-cont">
-                                <div class="ticket-color green"></div>
-                                <div class="ticket-id">#eidut3</div>
-                                <div class="ticket-area">Some Task</div>
+                                <div class="ticket-color ${modalPriorityColor}"></div>
+                                <div class="ticket-id">#${taskId}</div>
+                                <div class="ticket-area">${task}</div>
                             </div>`
     mainCont.appendChild(ticketCont);
 
