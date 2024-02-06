@@ -6,6 +6,8 @@ let mainCont = document.querySelector(".main-cont");
 let removeBtn = document.querySelector(".remove-btn");
 var uid = new ShortUniqueId();
 let modalPriorityColor = "black";
+let color = ["red","blue","green","black"];
+
 let addModal = true;
 let removeFlag = false;
 
@@ -69,6 +71,24 @@ function createTicket(task,taskId,modalPriorityColor) {
         if (removeFlag){
             ticketCont.remove();
         }
+    })
+
+    //handle priority color change
+    let ticketColor = ticketCont.querySelector(".ticket-color" )
+    ticketColor.addEventListener("click",function(){
+        let currentColor = ticketColor.classList[1];
+        let currentColorIndex = -1;
+        for (let i=0;i<color.length;i++){
+            if (color[i]==currentColor){
+                currentColorIndex = i;
+                break
+            }
+        }
+        let nextColorIndex = (currentColorIndex+1)%color.length;
+        let nextColor = color[nextColorIndex];
+        ticketColor.classList.remove(currentColor);
+        ticketColor.classList.add(nextColor)
+
     })
 }
 
