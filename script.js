@@ -1,15 +1,28 @@
 let addBtn = document.querySelector(".add-btn");
 let modal = document.querySelector(".modal-cont");
 let allPriorityColor = document.querySelectorAll(".priority-color");
+let allFilterColor = document.querySelectorAll(".color");
 let textarea = document.querySelector(".textarea-cont");
 let mainCont = document.querySelector(".main-cont");
 let removeBtn = document.querySelector(".remove-btn");
 var uid = new ShortUniqueId();
 let modalPriorityColor = "black";
 let color = ["red","blue","green","black"];
+let ticketArr = [];
 
 let addModal = true;
 let removeFlag = false;
+
+if(localStorage.getItem("tickets")){
+    // console.log(localStorage.getItem("tickets"));
+    let strArr = localStorage.getItem("tickets");
+    let arr = JSON.parse(strArr);
+    // console.log(arr);
+    for(let i=0;i<arr.length;i++){
+        let ticket = arr[i];
+        createTicket(ticket.task,ticket.id,ticket.color);
+    }
+}
 
 addBtn.addEventListener("click",function(){
     if(addModal){
@@ -56,6 +69,30 @@ removeBtn.addEventListener("click",function(){
     }
 })
 
+for (let i = 0; i < allFilterColor.length ;i++ ){
+    allFilterColor[i].addEventListener("click",function(){
+        let allTicketsColor = document.querySelectorAll(".ticket-color");
+        let currentSelected = allFilterColor[i].classList[1];
+        for (let j=0;j<allTicketsColor.length;j++){
+            let currentTicketColor = allTicketsColor[j].classList[1];
+            if (currentTicketColor == currentSelected){
+                allTicketsColor[j].parentElement.style.display = "block";
+            }
+            else{
+                allTicketsColor[j].parentElement.style.display = "none";
+            }
+        }
+    })
+    allFilterColor[i].addEventListener("dblclick",function(){
+        let allTicketsColor = document.querySelectorAll(".ticket-color");
+        for (let j=0;j<allTicketsColor.length;j++){
+            allTicketsColor[j].parentElement.style.display = "block";
+        }
+    })
+
+}
+
+
 function createTicket(task,taskId,modalPriorityColor) {
     let ticketCont = document.createElement('div');
     ticketCont.setAttribute("class","ticket-cont");
@@ -64,11 +101,19 @@ function createTicket(task,taskId,modalPriorityColor) {
                             <div class="ticket-area">${task}</div>
                             <div class="lock-unlock"><i class="fa-solid fa-lock"></i></div>`
     mainCont.appendChild(ticketCont);
+    ticketArr.push({color:modalPriorityColor,id:taskId,task:task});
+    updateLocalStorage(ticketArr);
+ 
 
     //handle delete of ticket
     ticketCont.addEventListener("click",function(){
         if (removeFlag){
             ticketCont.remove();
+            let idx = ticketArr.findIndex(function(obj){
+                return obj.id = taskId;
+            })
+            ticketArr.splice(idx,1);
+            updateLocalStorage(ticketArr);
         }
     })
 
@@ -87,6 +132,16 @@ function createTicket(task,taskId,modalPriorityColor) {
         let nextColor = color[nextColorIndex];
         ticketColor.classList.remove(currentColor);
         ticketColor.classList.add(nextColor)
+        //updating array in local storage to hold the latest ticket color
+        let idx;
+        for (let i = 0; i < ticketArr.length; i++){
+            if (ticketArr[i].id==taskId){
+                idx = i;
+                break
+            }
+        }
+        ticketArr[idx].color = nextColor;
+        updateLocalStorage(ticketArr);
 
     })
 
@@ -105,7 +160,23 @@ function createTicket(task,taskId,modalPriorityColor) {
             lockUnlockBtn.classList.add("fa-lock");
             taskArea.setAttribute("contenteditable","false");
         }
+        // let idx;
+        // for (let i = 0; i < ticketArr.length; i++){
+        //     if (ticketArr[i].id==taskId){
+        //         idx = i;
+        //         break
+        //     }
+        // }
+        let idx = ticketArr.findIndex(function(obj){
+            return obj.id == taskId;
+        })
+        ticketArr[idx].task = taskArea.innerText;
+        updateLocalStorage(ticketArr)
     })
 
 }
 
+function updateLocalStorage(ticketArr){
+    let strArr = JSON.stringify(ticketArr);
+    localStorage.setItem("tickets",strArr);
+}

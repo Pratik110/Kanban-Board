@@ -132,10 +132,13 @@
     width: 15rem;
     background-color: aliceblue;
     position: relative;
+    border-radius: 20px;
+    /* border: 2px green solid; */
 }
 
 .ticket-color{
     height: 1rem;
+    border-radius: 20px;
 
 }
 
@@ -144,12 +147,14 @@
     font-weight: 600;
     font-size: 0.75rem;
     padding-left: 10px;
+    padding-top : 10px;
 }
 
 .ticket-area{
     height: 7.5rem;
     padding: 5px;
     font-size: 1.25rem;
+    padding-top : 20px;
 }
 
 .lock-unlock{
